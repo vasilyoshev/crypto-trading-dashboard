@@ -1,0 +1,11 @@
+export function Logo() {
+  return (
+    <svg className="logo" viewBox="0 0 64 40" aria-hidden="true" focusable="false">
+      <path
+        fill="currentColor"
+        d="M3 3c2 9 9 13 17 12l3 4h18l3-4c8 1 15-3 17-12-3 6-9 8-16 7l-4-3H23l-4 3C12 11 6 9 3 3z"
+      />
+      <path fill="currentColor" d="M23 21h18l-2 11c-1 4-4 6-7 6s-6-2-7-6z" />
+    </svg>
+  )
+}
