@@ -397,6 +397,12 @@ button:disabled {
   }
 }
 
+/* Recharts makes the chart and its layers focusable, so a click would draw a focus box. */
+.chart :focus,
+.chart :focus-visible {
+  outline: none;
+}
+
 .chart--placeholder {
   display: flex;
   flex-direction: column;
@@ -593,6 +599,21 @@ button:disabled {
 .form-error {
   color: var(--loss);
   font-size: 0.85rem;
+}
+
+.modal__hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.modal__hint kbd {
+  padding: 1px 5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-muted);
+  font-family: inherit;
+  font-size: 0.7rem;
 }
 
 .modal__actions {

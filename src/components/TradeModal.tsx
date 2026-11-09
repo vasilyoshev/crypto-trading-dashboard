@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { tradeExecuted, validateTrade, type TradeSide } from '../store/portfolioSlice'
 import { formatCrypto, formatEur, formatPrice, parseAmount, toInputValue } from '../utils/format'
@@ -65,6 +65,13 @@ export default function TradeModal({ symbol, priceEur, onClose }: Props) {
     onClose()
   }
 
+  // Enter buys and Shift+Enter sells, so a trade can be placed without the mouse.
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter' || event.nativeEvent.isComposing) return
+    event.preventDefault()
+    submit(event.shiftKey ? 'sell' : 'buy')
+  }
+
   return (
     <div
       className="modal-backdrop"
@@ -91,6 +98,7 @@ export default function TradeModal({ symbol, priceEur, onClose }: Props) {
             aria-label="Amount in EUR"
             value={eurValue}
             onChange={(event) => changeEur(event.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <span className="field__unit">EUR</span>
         </label>
@@ -105,6 +113,7 @@ export default function TradeModal({ symbol, priceEur, onClose }: Props) {
             aria-label={`Amount in ${symbol}`}
             value={coinValue}
             onChange={(event) => changeCoin(event.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <span className="field__unit">{symbol}</span>
         </label>
@@ -126,6 +135,9 @@ export default function TradeModal({ symbol, priceEur, onClose }: Props) {
             Sell
           </button>
         </div>
+        <p className="modal__hint">
+          <kbd>Enter</kbd> to buy · <kbd>Shift</kbd> + <kbd>Enter</kbd> to sell
+        </p>
       </div>
     </div>
   )

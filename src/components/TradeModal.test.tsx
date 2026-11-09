@@ -73,6 +73,37 @@ describe('TradeModal', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('greater than zero')
   })
 
+  it('buys with Enter', async () => {
+    const { user, store, onClose } = setup()
+
+    await user.type(screen.getByLabelText('Amount in EUR'), '1000{Enter}')
+
+    expect(store.getState().portfolio.holdings.BTC.amount).toBeCloseTo(0.02)
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('sells with Shift+Enter', async () => {
+    const { user, store } = setup({
+      ...createInitialPortfolio(),
+      holdings: { BTC: { amount: 0.1, costEur: 4_000 } },
+    })
+
+    await user.type(screen.getByLabelText('Amount in BTC'), '0.04{Shift>}{Enter}{/Shift}')
+
+    const { portfolio } = store.getState()
+    expect(portfolio.holdings.BTC.amount).toBeCloseTo(0.06)
+    expect(portfolio.transactions[0].side).toBe('sell')
+  })
+
+  it('keeps the dialog open when Enter submits an invalid trade', async () => {
+    const { user, onClose } = setup()
+
+    await user.type(screen.getByLabelText('Amount in EUR'), '{Enter}')
+
+    expect(screen.getByRole('alert')).toHaveTextContent('greater than zero')
+    expect(onClose).not.toHaveBeenCalled()
+  })
+
   it('closes with Escape', async () => {
     const { user, onClose } = setup()
 
