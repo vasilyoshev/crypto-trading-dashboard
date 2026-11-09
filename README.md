@@ -15,7 +15,7 @@ The layout follows the provided mobile Figma design and adapts to tablet and des
 Requirements: [Node.js](https://nodejs.org/) 20.19+ or 22.12+ and npm.
 
 ```bash
-git clone https://github.com/<your-account>/crypto-trading-dashboard.git
+git clone https://github.com/vasilyoshev/crypto-trading-dashboard.git
 cd crypto-trading-dashboard
 npm install
 npm run dev
