@@ -12,6 +12,41 @@ The layout follows the provided mobile Figma design and adapts to tablet and des
 
 ## Getting started
 
+No API key is needed. Prices come from Binance's public market-data endpoint (`data-api.binance.vision`).
+
+There are two ways to run the app. Docker needs nothing else installed. The Node.js route gives you the development server with hot reload.
+
+### Option 1: Docker (no Node.js needed)
+
+Requirements: [Docker](https://docs.docker.com/get-docker/) with Docker Compose (included in Docker Desktop).
+
+```bash
+git clone https://github.com/vasilyoshev/crypto-trading-dashboard.git
+cd crypto-trading-dashboard
+docker compose up --build
+```
+
+Then open http://localhost:8080. Press `Ctrl+C` to stop, and run `docker compose down` to remove the container.
+
+The image is a multi-stage build: Node.js installs the dependencies and builds the app, then only the static files are copied into a small nginx image. The first build takes a minute or two.
+
+Without Compose, the same thing with plain Docker:
+
+```bash
+docker build -t crypto-trading-dashboard .
+docker run --rm -p 8080:80 crypto-trading-dashboard
+```
+
+To run the linter and unit tests inside Docker (the build fails if any test fails):
+
+```bash
+docker build --target test .
+```
+
+If port 8080 is taken, change the left side of the port mapping, e.g. `-p 3000:80`, or `'3000:80'` in `docker-compose.yml`.
+
+### Option 2: Node.js
+
 Requirements: [Node.js](https://nodejs.org/) 20.19+ or 22.12+ and npm.
 
 ```bash
@@ -22,8 +57,6 @@ npm run dev
 ```
 
 Then open http://localhost:5173.
-
-No API key is needed. Prices come from Binance's public market-data endpoint (`data-api.binance.vision`).
 
 ### Scripts
 
@@ -46,6 +79,7 @@ No API key is needed. Prices come from Binance's public market-data endpoint (`d
 | Data | Binance public REST API (`/ticker/24hr` and `/klines`) |
 | Styling | Plain CSS with custom properties |
 | Tests | Vitest and React Testing Library |
+| Container | Multi-stage Docker build, served by nginx |
 
 ## Project structure
 
